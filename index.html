@@ -46,7 +46,7 @@ window.onload = function () {
         const widgetId = turnstile.render("#turnstile-container", {
             // ⚠️ '<YOUR-SITE-KEY>' の部分をご自身のTurnstileサイトキー（0x4aaaaaaa... などの文字列）に書き換えてください
             sitekey: "<YOUR-SITE-KEY>",
-            theme: "dark",
+            theme: "auto",
             callback: function (token) {
                 console.log("Success:", token);
                 // 認証が成功したら、以下のゲーム移行処理を動かす
