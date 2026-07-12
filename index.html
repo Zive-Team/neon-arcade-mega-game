@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ネオンアーケード//メガゲームセンター</title>
-<script
-  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-  async
-  defer
-></script>
+    <!-- 💡 ルール1: 明示的なレンダリング（?render=explicit）を使用 -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
     <style>
         html, body {
             background: #111 !important;
@@ -38,23 +35,28 @@
 <!-- 🔒 認証が完了するまで画面全体を覆うコンテナ -->
 <div id="auth-overlay">
     <h2>安全な接続を確認しています</h2>
-<div class="cf-turnstile" data-sitekey="<YOUR-SITE-KEY>"></div>
-    <div
-  class="cf-turnstile"
-  data-sitekey="<YOUR-SITE-KEY>"
-  data-theme="light"
-  data-size="normal"
-  data-callback="onSuccess"
-></div>
+    <!-- 💡 ルール2: クラス「cf-turnstile」を指定せずにコンテナを作成 -->
+    <div id="turnstile-container"></div>
 </div>
 
 <script>
-    const widgetId = turnstile.render("#turnstile-container", {
-  sitekey: "<YOUR-SITE-KEY>",
-  callback: function (token) {
-    console.log("Success:", token);
-  },
-});
+// 💡 ルール3: 画面の準備ができたら、プログラムでウィジェットをレンダリングする
+window.onload = function () {
+    if (typeof turnstile !== 'undefined') {
+        const widgetId = turnstile.render("#turnstile-container", {
+            // ⚠️ '<YOUR-SITE-KEY>' の部分をご自身のTurnstileサイトキー（0x4aaaaaaa... などの文字列）に書き換えてください
+            sitekey: "<YOUR-SITE-KEY>",
+            theme: "dark",
+            callback: function (token) {
+                console.log("Success:", token);
+                // 認証が成功したら、以下のゲーム移行処理を動かす
+                onAuthSuccess();
+            },
+        });
+    }
+};
+
+// 💡 認証成功後にゲーム画面（game.html）をロードして裏側で切り替える処理
 async function onAuthSuccess() {
     try {
         // 同一階層にあるゲーム本体（game.html）を裏側でロード
@@ -62,17 +64,17 @@ async function onAuthSuccess() {
         if (!response.ok) throw new Error('HTMLの読み込みエラー');
         const htmlText = await response.text();
         
-        // 2. 認証ロック用の黒画面を画面から完全に消去
+        // 認証ロック用の黒画面を画面から完全に消去
         document.getElementById('auth-overlay').remove();
         
-        // 3. 画面を真っ白にさせず、game.htmlのデータで画面を丸ごと安全に置き換える
+        // 画面を真っ白にさせず、game.htmlのデータで画面を丸ごと安全に置き換える
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
         
         // 全体のHTMLをゲームのものに上書き
         document.documentElement.innerHTML = doc.documentElement.innerHTML;
         
-        // 4. ゲームを動かすためのViteプログラム（TypeScript等）の命令を強制的に再起動させる
+        // ゲームを動かすためのViteプログラム（TypeScript等）の命令を強制的に再起動させる
         const scripts = document.querySelectorAll('script');
         scripts.forEach(oldScript => {
             const newScript = document.createElement('script');
