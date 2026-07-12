@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ネオンアーケード//メガゲームセンター</title>
+   <script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer
+></script>
+    <style>
+        /* 3. 認証が完了するまで画面全体を覆うスタイル */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #111;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 9999;
+        }
+        #auth-overlay h2 {
+            font-family: sans-serif;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="auth-overlay" class="box">
+    <h2>安全な接続を確認しています</h2>
+    <!-- ⚠️ ご自身のTurnstileサイトキーに書き換えてください -->
+    <div class="cf-turnstile" data-sitekey="**************" data-callback="onAuthSuccess"></div>
+</div>
+
+<script>
+async function onAuthSuccess(token) {
+    try {
+        // 同一階層にあるビルド済みのゲームHTML（game.html）を裏側で読み込む
+        const response = await fetch('./game.html');
+        const htmlText = await response.text();
+        
+        // 1. 認証画面を完全に消去
+        document.getElementById('auth-screen').remove();
+        
+        // 2. 読み込んだ game.html の中身で、現在のブラウザ画面を丸ごと置き換える
+        document.open();
+        document.write(htmlText);
+        document.close();
+    } catch (error) {
+        console.error('ゲームの読み込みに失敗しました:', error);
+    }
+}
+</script>
+</body>
+</html>
