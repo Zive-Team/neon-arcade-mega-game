@@ -34,23 +34,18 @@
     <div class="cf-turnstile" data-sitekey="**************" data-callback="onAuthSuccess"></div>
 </div>
 
+<!-- 🕹️ ゲーム本体 -->
+<div id="root"></div>
+
 <script>
-async function onAuthSuccess(token) {
-    try {
-        // 同一階層にあるビルド済みのゲームHTML（game.html）を裏側で読み込む
-        const response = await fetch('./game.html');
-        const htmlText = await response.text();
-        
-        // 1. 認証画面を完全に消去
-        document.getElementById('auth-screen').remove();
-        
-        // 2. 読み込んだ game.html の中身で、現在のブラウザ画面を丸ごと置き換える
-        document.open();
-        document.write(htmlText);
-        document.close();
-    } catch (error) {
-        console.error('ゲームの読み込みに失敗しました:', error);
-    }
+function onAuthSuccess(token) {
+    // 1. 認証画面を消去
+    document.getElementById('auth-overlay').remove();
+    // 2. ゲームプログラムを呼び出して起動
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = '/src/main.tsx'; // 実際のゲームエントリーポイント
+    document.body.appendChild(script);
 }
 </script>
 </body>
