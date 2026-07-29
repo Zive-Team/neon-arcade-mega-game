@@ -36,21 +36,6 @@ export function GameMenu({ onSelect }: Props) {
           </div>
         </div>
       </header>
-
-      <main className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8">
-        <div className="mb-5 flex items-center gap-3">
-          <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, #00f0ff, transparent)' }} />
-          <span className="font-display text-sm font-700 tracking-[0.3em] neon-text-cyan">
-            プレイ可能 <span className="font-mono text-xs opacity-70">[{GAMES.length}]</span>
-          </span>
-          <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, #00f0ff)' }} />
-        </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {GAMES.map((g) => (
-            <GameCard key={g.id} game={g} onSelect={onSelect} />
-          ))}
-        </div>
-
         <div className="mt-10 flex flex-col items-center gap-3 rounded-2xl border-2 border-neon-green/40 bg-ink-800/60 px-6 py-8 text-center sm:px-10" style={{ boxShadow: '0 0 20px rgba(57,255,20,0.2)' }}>
           <div className="flex items-center gap-2">
             <Smartphone size={22} className="text-neon-green" style={{ color: '#39ff14' }} />
@@ -69,6 +54,22 @@ export function GameMenu({ onSelect }: Props) {
           </a>
           <p className="font-mono text-[11px] text-cyan-100/40 sm:text-xs">※「有害なファイルの可能性があります」と警告が出る場合は、「続行」または「ダウンロードする」を選択してください。</p>
         </div>
+      
+      <main className="relative z-10 mx-auto max-w-7xl px-5 py-8 sm:px-8">
+        <div className="mb-5 flex items-center gap-3">
+          <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, #00f0ff, transparent)' }} />
+          <span className="font-display text-sm font-700 tracking-[0.3em] neon-text-cyan">
+            プレイ可能 <span className="font-mono text-xs opacity-70">[{GAMES.length}]</span>
+          </span>
+          <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, #00f0ff)' }} />
+        </div>
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {GAMES.map((g) => (
+            <GameCard key={g.id} game={g} onSelect={onSelect} />
+          ))}
+        </div>
+
+
       </main>
     </div>
   );
