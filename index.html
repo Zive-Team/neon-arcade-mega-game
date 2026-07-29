@@ -23,9 +23,6 @@ async function onAuthSuccess() {
         if (!response.ok) throw new Error('HTMLの読み込みエラー');
         const htmlText = await response.text();
         
-        // 認証ロック用の黒画面を画面から完全に消去
-        document.getElementById('auth-overlay').remove();
-        
         // 画面を真っ白にさせず、game.htmlのデータで画面を丸ごと安全に置き換える
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlText, 'text/html');
