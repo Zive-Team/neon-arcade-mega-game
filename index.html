@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ネオンアーケード//メガゲームセンター</title>
-    <!-- 💡 ルール1: 明示的なレンダリング（?render=explicit）を使用 -->
     <style>
         html, body {
             background: #111 !important;
@@ -17,35 +16,7 @@
     <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
-<script>
-// 💡 認証成功後にゲーム画面（game.html）をロードして裏側で切り替える処理
-async function onAuthSuccess() {
-    try {
-        // 同一階層にあるゲーム本体（game.html）を裏側でロード
-        const response = await fetch('./game.html');
-        if (!response.ok) throw new Error('HTMLの読み込みエラー');
-        const htmlText = await response.text();
-        
-        // 画面を真っ白にさせず、game.htmlのデータで画面を丸ごと安全に置き換える
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, 'text/html');
-        
-        // 全体のHTMLをゲームのものに上書き
-        document.documentElement.innerHTML = doc.documentElement.innerHTML;
-        
-        // ゲームを動かすためのViteプログラム（TypeScript等）の命令を強制的に再起動させる
-        const scripts = document.querySelectorAll('script');
-        scripts.forEach(oldScript => {
-            const newScript = document.createElement('script');
-            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
-
-    } catch (error) {
-        console.error('ゲーム画面への移行に失敗しました:', error);
-    }
-}
-</script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
