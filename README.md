@@ -11,12 +11,17 @@ Neon Arcade（ネオン・アーケード）は、PCやスマートフォンの�
 以下のリンクから、ブラウザですぐに完全無料でプレイできます。
 
 👉 **[Neon Arcade 公式サイトはこちら](https://neon-arcade.zive.f5.si/)**
+
 Androidアプリ登場
+
 **[アプリapkダウンロード](https://github.com/Zive-Team/neon-arcade-mega-game/tree/main/app/Android/apk)**
+
 ```adb install neongame-[バージョン].apk```
+
 を実行してインストールorスマホよりダウンロードし、ダウンロードフォルダからファイルをクリックし、インストールしてください。
 
 動作確認済み
+
 LG Docomo版L-51A(Android12)
 
 ---
