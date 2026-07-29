@@ -12,7 +12,7 @@ Neon Arcade（ネオン・アーケード）は、PCやスマートフォンの�
 
 👉 **[Neon Arcade 公式サイトはこちら](https://neon-arcade.zive.f5.si/)**
 
-##Androidアプリ登場
+## Androidアプリ登場
 
 **[アプリapkダウンロード](https://github.com/Zive-Team/neon-arcade-mega-game/tree/main/app/Android/apk)**
 
