@@ -4,89 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ネオンアーケード//メガゲームセンター</title>
-    <!-- 💡 ルール1: 明示的なレンダリング（?render=explicit）を使用 -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
     <style>
         html, body {
             background: #111 !important;
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden;
+            margin: 0; padding: 0; width: 100%;
+            min-height: 100%;
         }
-        /* 認証が完了するまで画面全体を完全にロックする黒画面 */
-        #auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #111;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 99999;
-        }
-        #auth-overlay h2 {
-            font-family: sans-serif;
-            color: #fff;
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: normal;
-        }
+        #root { min-height: 100vh; }
     </style>
+  <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
 </head>
 <body>
-
-<!-- 🔒 認証が完了するまで画面全体を覆うコンテナ -->
-<div id="auth-overlay">
-    <h2>安全な接続を確認しています</h2>
-    <!-- 💡 ルール2: クラス「cf-turnstile」を指定せずにコンテナを作成 -->
-    <div id="turnstile-container"></div>
-</div>
-
-<script>
-// 💡 ルール3: 画面の準備ができたら、プログラムでウィジェットをレンダリングする
-window.onload = function () {
-    if (typeof turnstile !== 'undefined') {
-        const widgetId = turnstile.render("#turnstile-container", {
-            // ⚠️ '<YOUR-SITE-KEY>' の部分をご自身のTurnstileサイトキー（0x4aaaaaaa... などの文字列）に書き換えてください
-            sitekey: "<YOUR-SITE-KEY>",
-            theme: "auto",
-            callback: function (token) {
-                console.log("Success:", token);
-                // 認証が成功したら、以下のゲーム移行処理を動かす
-                onAuthSuccess();
-            },
-        });
-    }
-};
-
-// 💡 認証成功後にゲーム画面（game.html）をロードして裏側で切り替える処理
-async function onAuthSuccess() {
-    try {
-        // 同一階層にあるゲーム本体（game.html）を裏側でロード
-        const response = await fetch('./game.html');
-        if (!response.ok) throw new Error('HTMLの読み込みエラー');
-        const htmlText = await response.text();
-        
-        // 認証ロック用の黒画面を画面から完全に消去
-        document.getElementById('auth-overlay').remove();
-        
-        // 画面を真っ白にさせず、game.htmlのデータで画面を丸ごと安全に置き換える
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, 'text/html');
-        
-        // 全体のHTMLをゲームのものに上書き
-        document.documentElement.innerHTML = doc.documentElement.innerHTML;
-        
-        // ゲームを動かすためのViteプログラム（TypeScript等）の命令を強制的に再起動させる
-        const scripts = document.querySelectorAll('script');
-        scripts.forEach(oldScript => {
-            const newScript = document.createElement('script');
-            Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-            newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-            oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
-
-    } catch (error) {
-        console.error('ゲーム画面への移行に失敗しました:', error);
-    }
-}
-</script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
